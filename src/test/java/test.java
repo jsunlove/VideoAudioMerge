@@ -59,9 +59,7 @@ public class test {
     @Test
     public void testFolderMethod() {
         String path = "C:\\Users\\sunwenchao-lhq\\Desktop\\downloads";
-        List<Bilibili> bilibiliList = FileUtil.folderMethod(path);
-        logger.warn("总共" + bilibiliList.size() + "条");
-        bilibiliList.forEach(bilibili -> logger.info("结果：" + bilibili));
+        FileUtil.folderMethod(path);
     }
 
 
