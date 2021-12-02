@@ -7,25 +7,25 @@ import lombok.ToString;
 /**
  * bilibili缓存文件实体类
  *
- * @author sunwenchao-lhq
- * @ClassName Bilibili
- * @date 2021/12/1 10:43
  */
 @Getter
 @Setter
 @ToString
 public class Bilibili {
 
-    // 投稿文件名
+    // 投稿稿件名
+    private String title;
+
+    // 投稿分p名
     private String contributionFileName;
 
-    // danmuku.xml
+    // danmuku.xml地址
     private String danmuku;
 
-    // audio.m4s
+    // audio.m4s 地址
     private String audio;
 
-    // video.m4s
+    // video.m4s 地址
     private String video;
 
 }

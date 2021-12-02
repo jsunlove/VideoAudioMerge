@@ -10,9 +10,6 @@ import java.io.InputStreamReader;
 /**
  * ffmpeg工具类
  *
- * @author sunwenchao-lhq
- * @ClassName ffmpegUtil
- * @date 2021/12/1 9:54
  */
 public class FfmpegUtil {
 
@@ -24,12 +21,13 @@ public class FfmpegUtil {
 
     public static void merge(String videoInputPath, String audioInputPath, String videoOutPath) throws IOException {
         StringBuilder ffmpeg = new StringBuilder();
-        ffmpeg.append("ffmpeg -i ");
+        ffmpeg.append(" ffmpeg -i ");
         ffmpeg.append(videoInputPath);
         ffmpeg.append(" -i ");
         ffmpeg.append(audioInputPath);
-        ffmpeg.append(" -c:v copy -c:a aac -strict experimental");
-        ffmpeg.append(" -map 0:v:0 -map 1:a:0 -y ");
+        ffmpeg.append(" -c:v copy -c:a aac -strict experimental ");
+        // ffmpeg.append(" -threads 5 -preset ultrafast "); // 开启多线程，但是感觉没啥用啊
+        //  ffmpeg.append(" -map 0:v:0 -map 1:a:0 -y "); // 如果视频有音频，使用这个去替换
         ffmpeg.append(videoOutPath);
 
         Process process = null;

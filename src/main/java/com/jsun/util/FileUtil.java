@@ -12,12 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static org.apache.log4j.helpers.Loader.getResource;
+
 /**
  * 文件与文件夹工具类
  *
- * @author sunwenchao-lhq
- * @ClassName fileUtil
- * @date 2021/12/1 10:20
  */
 public class FileUtil {
 
@@ -26,7 +25,7 @@ public class FileUtil {
 
     private static Logger logger = Logger.getLogger(FileUtil.class);
 
-    public static Map<String,List<Bilibili>> folderMethod(String path) {
+    public static List<Bilibili> folderMethod(String path) {
         /*
           --投稿
           ----分p
@@ -37,16 +36,17 @@ public class FileUtil {
           ------弹幕库
           ------文件信息
          */
-        Map<String,List<Bilibili>> resultMap = new HashMap<>();
 
+        List<Bilibili> resultList = new ArrayList<>();
         File files = new File(path);
 
         if (files.exists()) {
             if (null == files.listFiles()) {
-                return null;
+                return Collections.emptyList();
             }
 
             LinkedList<File> list = new LinkedList<>(Arrays.asList(Objects.requireNonNull(files.listFiles())));
+
             while (!list.isEmpty()) {
                 // 获取投稿
                 File contribution = list.removeFirst();
@@ -56,20 +56,17 @@ public class FileUtil {
                     continue;
                 }
 
-                List<Bilibili> resultList = new ArrayList<>();
                 // 遍历所有的投稿数据
                 for (File episode : episodes) {
                     Bilibili bilibili = getData(episode);
                     resultList.add(bilibili);
                 }
-
-                resultMap.put(contribution.getName(),resultList);
             }
         } else {
             logger.info("文件不存在!");
         }
 
-        return resultMap;
+        return resultList;
     }
 
     /**
@@ -116,7 +113,8 @@ public class FileUtil {
 
         switch (file.getName()) {
             case "entry.json":
-                bilibili.setContributionFileName(getContributionFileName(file));
+                bilibili.setContributionFileName(getName(2,file));
+                bilibili.setTitle(getName(1,file));
                 break;
             case "danmuku.xml":
                 bilibili.setDanmuku(file.getAbsolutePath());
@@ -133,14 +131,15 @@ public class FileUtil {
     }
 
     /**
-     * 通过entry.json获取投稿文件名
+     * 通过entry.json获取投稿文件名，分p名
      *
+     * @param type 类型 1-投稿名  2-分p名
      * @param jsonFile entry.json的文件对象
      * @return 投保文件名
      */
-    public static String getContributionFileName(File jsonFile) {
+    public static String getName(int type, File jsonFile) {
 
-        String jsonStr = null;
+        String jsonStr;
         try {
             jsonStr = readJsonFile(jsonFile);
         } catch (IOException e) {
@@ -149,20 +148,24 @@ public class FileUtil {
         }
 
         try {
+            // 投稿名
             String title = JSON.parseObject(jsonStr).getString("title");
-            logger.info("title:" + title);
+            // 分p名
             String part = JSON.parseObject(jsonStr).getJSONObject("page_data").getString("part");
-            logger.info("part:" + part);
+            // 下载名 （投稿名 分p名）
             String downloadSubtitle = JSON.parseObject(jsonStr).getJSONObject("page_data").getString("download_subtitle");
-            logger.info("download_subtitle:" + downloadSubtitle);
 
-            if(title.trim().equalsIgnoreCase(downloadSubtitle.trim())){
+            if(type == 1){
                 return title;
-            } else {
-                return part;
+            } else if (type == 2) {
+                if(title.trim().equalsIgnoreCase(downloadSubtitle.trim())){
+                    return title;
+                } else {
+                    return part;
+                }
             }
 
-
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -225,5 +228,14 @@ public class FileUtil {
         return null;
     }
 
+
+    /**
+     * 获取当前项目路径
+     * @return
+     */
+    public static String getPath(String fileName){
+        // return FileUtil.class.getResource(fileName).getFile();
+        return Class.class.getResource(fileName).getFile();
+    }
 
 }

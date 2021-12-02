@@ -1,23 +1,24 @@
 import com.jsun.pojo.Bilibili;
 import com.jsun.util.FfmpegUtil;
 import com.jsun.util.FileUtil;
+import com.jsun.videoAudioMerge;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * 测试方法
- *
- * @author sunwenchao-lhq
- * @ClassName test
- * @date 2021/12/1 10:23
  */
 public class test {
 
@@ -35,31 +36,22 @@ public class test {
     }
 
     @Test
-    public void testFileUtil() {
-        String path = "C:\\Users\\sunwenchao-lhq\\Desktop\\ffmpeg";
-        // List<Bilibili> list = FileUtil.folderMethod1(path);
-        System.out.println(FileUtil.folderFiles(path));
-    }
+    public void testFile() {
+        // String path = this.getClass().getResource("config.properties").getPath();
+        String path = FileUtil.getPath("config.properties");
+        logger.info("地址是："+path);
+        Properties properties;
+        try {
+            properties = new Properties();
+            properties.load(new FileInputStream(path));
+            logger.info(properties.get("Input.FilesPath"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    @Test
-    public void jsun() throws IOException {
+        String path1 = FileUtil.getPath("downloads");
+        logger.info(path1+"\\out");
 
-        String filePath = "C:\\Users\\sunwenchao-lhq\\Desktop\\ffmpeg";
-        Path start = FileSystems.getDefault().getPath(filePath);
-        Files.walk(start).filter(path -> path.toFile().isFile())
-                .forEach(path -> System.out.println(path.toFile().getAbsolutePath()));
-    }
-
-    @Test
-    public void testGetData() {
-        Bilibili bilibili = FileUtil.getData(new File("C:\\Users\\sunwenchao-lhq\\Desktop\\ffmpeg\\3637095\\c_5818388"));
-        System.out.println("结果" + bilibili);
-    }
-
-    @Test
-    public void testFolderMethod() {
-        String path = "C:\\Users\\sunwenchao-lhq\\Desktop\\downloads";
-        FileUtil.folderMethod(path);
     }
 
 
