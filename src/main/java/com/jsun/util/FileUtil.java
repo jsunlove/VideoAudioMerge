@@ -113,8 +113,9 @@ public class FileUtil {
 
         switch (file.getName()) {
             case "entry.json":
-                bilibili.setContributionFileName(getName(2,file));
                 bilibili.setTitle(getName(1,file));
+                bilibili.setContributionFileName(getName(2,file));
+                bilibili.setPage(getName(3,file));
                 break;
             case "danmuku.xml":
                 bilibili.setDanmuku(file.getAbsolutePath());
@@ -152,8 +153,11 @@ public class FileUtil {
             String title = JSON.parseObject(jsonStr).getString("title");
             // 分p名
             String part = JSON.parseObject(jsonStr).getJSONObject("page_data").getString("part");
+            // 分p数
+            String page = JSON.parseObject(jsonStr).getJSONObject("page_data").getString("page");
             // 下载名 （投稿名 分p名）
             String downloadSubtitle = JSON.parseObject(jsonStr).getJSONObject("page_data").getString("download_subtitle");
+
 
             if(type == 1){
                 return title;
@@ -163,6 +167,8 @@ public class FileUtil {
                 } else {
                     return part;
                 }
+            } else if (type == 3){
+                return page;
             }
 
             return null;
@@ -234,8 +240,8 @@ public class FileUtil {
      * @return
      */
     public static String getPath(String fileName){
-        // return FileUtil.class.getResource(fileName).getFile();
-        return Class.class.getResource(fileName).getFile();
+        return FileUtil.class.getResource(fileName).getFile();
+        // return Class.class.getResource(fileName).getFile();
     }
 
 }

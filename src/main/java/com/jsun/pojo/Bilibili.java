@@ -16,6 +16,9 @@ public class Bilibili {
     // 投稿稿件名
     private String title;
 
+    // p数
+    private String page;
+
     // 投稿分p名
     private String contributionFileName;
 

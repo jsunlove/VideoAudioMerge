@@ -5,10 +5,8 @@ import com.jsun.videoAudioMerge;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -53,6 +51,7 @@ public class test {
         logger.info(path1+"\\out");
 
     }
+
 
 
 }

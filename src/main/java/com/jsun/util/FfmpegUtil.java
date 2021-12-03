@@ -29,6 +29,7 @@ public class FfmpegUtil {
         // ffmpeg.append(" -threads 5 -preset ultrafast "); // 开启多线程，但是感觉没啥用啊
         //  ffmpeg.append(" -map 0:v:0 -map 1:a:0 -y "); // 如果视频有音频，使用这个去替换
         ffmpeg.append(videoOutPath);
+        ffmpeg.append(" -y ");
 
         Process process = null;
 
